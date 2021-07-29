@@ -1,0 +1,113 @@
+# -*- rdoc -*-
+
+= NEWS for Ruby 2.7.0
+
+This document is a list of user visible feature changes made between
+releases except for bug fixes.
+
+Note that each entry is kept so brief that no reason behind or reference
+information is supplied with.  For a full list of changes with all
+sufficient information, see the ChangeLog file or Redmine
+(e.g. <tt>https://bugs.ruby-lang.org/issues/$FEATURE_OR_BUG_NUMBER</tt>)
+
+== Changes since the 2.6.0 release
+
+=== Language changes
+
+* Method reference operator, <code>.:</code> is introduced as an
+  experimental feature.  [Feature #12125] [Feature #13581]
+
+* Proc.new and proc with no block in a method called with a block is warned
+  now.
+
+* lambda with no block in a method called with a block errs.
+
+* Non-Symbol keys in a keyword arguments hash was prohibited at 2.6.0, but
+  now allowed again.  [Bug #15658]
+
+* Numbered parameter as the default block parameter is introduced as an
+  experimental feature.  [Feature #4475]
+
+* A beginless range is experimentally introduced.  It might not be as useful
+  as an endless range, but would be good for DSL purpose.
+
+     ary[..3]  # identical to ary[0..3]
+     where(sales: ..100)
+
+=== Core classes updates (outstanding ones only)
+
+Enumerable::
+
+  New method::
+
+    * Added Enumerable#tally.  [Feature #11076]
+
+Enumerator::
+
+  New method::
+
+    * Added Enumerator::Yielder#to_proc so that a Yielder object
+      can be directly passed to another method as a block
+      argument.  [Feature #15618]
+
+Regexp/String::
+
+    * Update Unicode version and Emoji version from 11.0.0 to
+      12.0.0.  [Feature #15321]
+
+    * Update Unicode version to 12.1.0, adding support for
+      U+32FF SQUARE ERA NAME REIWA.  [Feature #15195]
+
+=== Stdlib updates (outstanding ones only)
+
+CSV::
+
+  * Upgrade to 3.0.4.
+    See https://github.com/ruby/csv/blob/master/NEWS.md.
+
+Date::
+
+  * Date.jisx0301, Date#jisx0301, and Date.parse provisionally support the
+    new Japanese era as an informal extension, until the new JIS X 0301 is
+    issued.  [Feature #15742]
+
+ERB::
+
+  * Prohibit marshaling ERB instance.
+
+RSS::
+
+  * Upgrade to RSS 0.2.8.
+    See https://github.com/ruby/rss/blob/master/NEWS.md.
+
+=== Compatibility issues (excluding feature bug fixes)
+
+=== Stdlib compatibility issues (excluding feature bug fixes)
+
+profile.rb, Profiler__::
+
+  * Removed from standard library. No one maintains it from Ruby 2.0.0.
+
+=== C API updates
+
+=== Implementation improvements
+
+JIT::
+
+  * Default value of +--jit-max-cache+ is changed from 1,000 to 100
+
+  * Default value of +--jit-min-calls+ is changed from 5 to 10,000
+
+GC::
+
+  * New `GC.compact` method for compacting the heap.
+    This function compacts live objects in the heap so that fewer pages may
+    be used, and the heap may be more CoW friendly. [Feature #15626]
+
+    Details on the algorithm and caveats can be found here:
+    https://bugs.ruby-lang.org/issues/15626
+
+=== Miscellaneous changes
+
+* Require compilers to support C99 [Misc #15347]
+  * Details of our dialect: https://bugs.ruby-lang.org/projects/ruby-trunk/wiki/C99
