@@ -1,0 +1,153 @@
+# -*- rdoc -*-
+
+= NEWS for Ruby 2.5.0
+
+This document is a list of user visible feature changes made between
+releases except for bug fixes.
+
+Note that each entry is kept so brief that no reason behind or
+reference information is supplied with.  For a full list of changes
+with all sufficient information, see the ChangeLog file or Redmine
+(e.g. <tt>https://bugs.ruby-lang.org/issues/$FEATURE_OR_BUG_NUMBER</tt>)
+
+== Changes since the 2.4.0 release
+
+=== Language changes
+
+* Top-level constant look-up is removed.  [Feature #11547]
+
+* rescue/else/ensure are allowed inside do/end blocks.  [Feature #12906]
+
+=== Core classes updates (outstanding ones only)
+
+* Array
+
+  * Array#append  [Feature #12746]
+  * Array#prepend  [Feature #12746]
+
+* Dir
+
+  * Dir.glob provides new optional keyword argument, :base.
+    [Feature #13056]
+  * Dir.children  [Feature #11302]
+  * Dir.each_child  [Feature #11302]
+
+* Integer
+
+  * Integer.sqrt  [Feature #13219]
+  * Integer#step does no longer rescue exceptions when given
+    a step value which cannot be compared with #> to 0. [Feature #7688]
+  * Integer#{round,floor,ceil,truncate} now always return an Integer.
+    [Bug #13420]
+
+* IO
+
+  * IO#pread  [Feature #4532]
+  * IO#pwrite  [Feature #4532]
+
+* IOError
+
+  * exception message "stream closed" is changed  [Bug #13405]
+
+* Kernel
+
+  * Kernel#yield_self  [Feature #6721]
+
+* Numeric
+
+  * Numerical comparison operators (<,<=,>=,>) no longer rescue exceptions
+    of #coerce. Return nil in #coerce if the coercion is impossible.
+    [Feature #7688]
+
+* Process
+
+  * Precision of Process.times is improved if getrusage(2) exists. [Feature #11952]
+
+* Range
+  * Range#initialize no longer rescue exceptions when comparing begin and
+    end with #<=> and raise a "bad value for range" ArgumentError
+    but instead let the exception from the #<=> call go through.
+    [Feature #7688]
+
+* Regexp
+  * Update Onigmo 6.1.1.
+    * Support absent operator https://github.com/k-takata/Onigmo/issues/82
+
+* Thread
+
+  * Thread#fetch  [Feature #13009]
+
+* String
+
+  * String#-@ deduplicates unfrozen strings.  Already-frozen
+    strings remain unchanged for compatibility.  [Feature #13077]
+  * -"literal" (String#-@) optimized to return the same object
+    (same as "literal".freeze in Ruby 2.1+) [Feature #13295]
+  * String#{casecmp,casecmp?} now return nil for non-string arguments
+    instead of raising a TypeError. [Bug #13312]
+  * String#delete_prefix is added to remove prefix [Feature #12694]
+  * String#delete_prefix! is added to remove prefix destructively [Feature #12694]
+
+=== Stdlib updates (outstanding ones only)
+
+* Net::HTTP
+  * Add more HTTP status classes
+
+  * Net::HTTP::STATUS_CODES is added as HTTP Status Code Repository [Misc #12935]
+
+  * Net::HTTP#proxy_user and Net::HTTP#proxy_pass now reflects http_proxy
+    environment variable if the system's environment variable is multiuser
+    safe. [Bug #12921]
+
+* RbConfig
+  * New constants:
+    * RbConfig::LIMITS is added to provide the limits of C types.
+
+* ERB
+  * Add ERB#result_with_hash to render a template with local variables passed
+    with a Hash object. [Feature #8631]
+
+  * Carriage returns are changed to be trimmed properly if trim_mode is specified
+    and used. Duplicated newlines will be removed on Windows. [Bug #5339] [Bug #11464]
+
+=== Compatibility issues (excluding feature bug fixes)
+
+* Net::HTTP
+  * Net::HTTP#start now pass :ENV to p_addr by default. [Bug #13351]
+    To avoid this, pass nil explicitly.
+
+* Random.raw_seed renamed to become Random.urandom.  It is now
+  applicable to non-seeding purposes due to [Bug #9569].
+
+* BasicSocket#read_nonblock and BasicSocket#write_nonblock no
+  longer sets the O_NONBLOCK file description flag as side effect
+  [Feature #13362]
+
+=== Stdlib compatibility issues (excluding feature bug fixes)
+
+* mathn.rb
+  Removed from stdlib. [Feature #10169]
+
+=== C API updates
+
+=== Supported platform changes
+
+=== Implementation improvements
+
+* (This might not be a "user visible feature change" but) Hash class's
+  hash function is now SipHash13. [Feature #13017]
+
+* SecureRandom now prefers OS-provided sources than OpenSSL. [Bug #9569]
+
+=== Miscellaneous changes
+
+* Print backtrace and error message in reverse order if STDERR is unchanged and a tty.
+  [Feature #8661] [experimental]
+
+* configure option --with-ext now mandates its arguments.  So for
+  instance if you run ./configure --with-ext=openssl,+ then the
+  openssl library is guaranteed compiled, otherwise the build fails
+  abnormally.
+
+  Note however to always add the ",+" at the end of the argument.
+  Otherwise nothing but openssl are built.  [Feature #13302]
